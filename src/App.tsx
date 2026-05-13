@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 
 import {
-  doc,
-  setDoc
-} from "firebase/firestore";
+  ref,
+  set
+} from "firebase/database";
 
 import { auth, db } from "./firebase";
 
@@ -27,19 +27,16 @@ function App() {
 
       if (currentUser) {
 
-        await setDoc(
-          doc(db, "users", currentUser.uid),
-          {
-            uid: currentUser.uid,
-            name: currentUser.displayName,
-            email: currentUser.email,
-            photoURL: currentUser.photoURL,
-            lastLogin: new Date()
-          },
-          {
-            merge: true
-          }
-        );
+     await set(
+  ref(db, `users/${currentUser.uid}`),
+  {
+    uid: currentUser.uid,
+    name: currentUser.displayName,
+    email: currentUser.email,
+    photoURL: currentUser.photoURL,
+    lastLogin: Date.now()
+  }
+);
 
       }
 
