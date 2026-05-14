@@ -31,3 +31,6 @@ export const db = getDatabase(app);
 export const storage = getStorage(app);
 
 export default app;
+console.log(import.meta.env.VITE_FIREBASE_DATABASE_URL);
+console.log(import.meta.env.VITE_FIREBASE_APP_ID);
+console.log(import.meta.env.VITE_FIREBASE_PROJECT_ID);
