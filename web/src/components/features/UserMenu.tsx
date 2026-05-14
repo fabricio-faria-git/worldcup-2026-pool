@@ -102,7 +102,7 @@ export const UserMenu = ({ mobile = false }: UserMenuProps) => {
   if (!user) {
     return (
       <Button onClick={handleSignIn} className={mobile ? 'text-xs' : 'w-full'}>
-        {mobile ? 'Sign In' : 'Sign In with Google'}
+        {mobile ? 'Entrar' : 'Entre com o Google'}
       </Button>
     );
   }
@@ -122,9 +122,9 @@ export const UserMenu = ({ mobile = false }: UserMenuProps) => {
               className="border-0 rounded-lg"
             />
             {[
-              { label: 'Score', value: userData.score, show: true },
+              { label: 'Pontos', value: userData.score, show: true },
               {
-                label: 'Rank',
+                label: 'Posição',
                 value: getPositionCompact(position!),
                 show: position !== null,
               },
@@ -198,7 +198,7 @@ export const UserMenu = ({ mobile = false }: UserMenuProps) => {
                       onClick={closeMenu}
                       className={menuItemClass}
                     >
-                      <span>⚽</span> My Predictions
+                      <span>⚽</span> Meus Palpites
                     </Link>
                   </li>
                   <li>
@@ -207,7 +207,7 @@ export const UserMenu = ({ mobile = false }: UserMenuProps) => {
                       onClick={closeMenu}
                       className={menuItemClass}
                     >
-                      <span>🏆</span> My Leagues
+                      <span>🏆</span> Minhas Ligas
                     </Link>
                   </li>
                 </>
@@ -218,7 +218,7 @@ export const UserMenu = ({ mobile = false }: UserMenuProps) => {
                   onClick={closeMenu}
                   className={menuItemClass}
                 >
-                  <span>✏️</span> Edit Profile
+                  <span>✏️</span> Editar perfil
                 </Link>
               </li>
               <li className={dividerClass} />
@@ -231,7 +231,7 @@ export const UserMenu = ({ mobile = false }: UserMenuProps) => {
                       onClick={closeMenu}
                       className={menuItemClass}
                     >
-                      <span>📋</span> Rules
+                      <span>📋</span> Regras
                     </Link>
                   </li>
                   <li>
@@ -240,7 +240,7 @@ export const UserMenu = ({ mobile = false }: UserMenuProps) => {
                       onClick={closeMenu}
                       className={menuItemClass}
                     >
-                      <span>ℹ️</span> About
+                      <span>ℹ️</span> Sobre
                     </Link>
                   </li>
                   <li className={dividerClass} />
@@ -255,7 +255,7 @@ export const UserMenu = ({ mobile = false }: UserMenuProps) => {
                   }}
                   className={menuItemClass}
                 >
-                  <span>👋</span> Sign Out
+                  <span>👋</span> Sair
                 </button>
               </li>
             </>

@@ -142,7 +142,7 @@ export const LeaderboardList = ({
   if (users.length === 0) {
     return (
       <div className="text-white/50 text-sm text-center py-4">
-        No players yet
+        Ainda não há jogadores
       </div>
     );
   }
@@ -221,7 +221,7 @@ export const LeaderboardList = ({
           </div>
         ) : (
           <h3 className="text-white/70 text-xs font-medium uppercase tracking-wider mb-2 px-4">
-            Leaderboard
+            Classificação
           </h3>
         ))}
       {/* Podium for full variant */}

@@ -27,7 +27,7 @@ export const Home = () => {
 
         {/* Content */}
         {loading && (
-          <div className="text-center text-white/70">Loading matches...</div>
+          <div className="text-center text-white/70">Carregando Jogos...</div>
         )}
 
         {error && (
