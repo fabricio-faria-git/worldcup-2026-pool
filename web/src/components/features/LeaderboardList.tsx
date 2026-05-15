@@ -69,7 +69,7 @@ const UserRow = ({
       <button
         onClick={onRemove}
         className="p-1.5 text-white/30 rounded hover:cursor-pointer hover:text-white/80"
-        title="Remove from league"
+        title="Remover da liga"
       >
         ✕
       </button>
@@ -162,7 +162,7 @@ export const LeaderboardList = ({
               onClick={() => setDropdownOpen(!dropdownOpen)}
               className="w-full flex items-center justify-between text-white/70 text-xs font-medium uppercase tracking-wider hover:text-white transition-colors"
             >
-              {selectedLeague ? selectedLeague.name : 'Leaderboard'}
+              {selectedLeague ? selectedLeague.name : 'Classificação'}
               <span
                 className={`transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}
               >

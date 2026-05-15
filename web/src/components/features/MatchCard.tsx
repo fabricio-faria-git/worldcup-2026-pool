@@ -226,7 +226,7 @@ export const MatchCard = ({
 
       {/* Footer: Group, Stadium, Date/Time */}
       <div className="flex items-center gap-2 text-xs text-white/50">
-        {match.group && <span>Group: {match.group}</span>}
+        {match.group && <span>Groupo: {match.group}</span>}
         {match.group && <span>·</span>}
         <span className="truncate">
           {match.locationCity}, {match.locationCountry}

@@ -74,14 +74,14 @@ export const Leagues = () => {
     <AppLayout>
       <div className="pt-8 px-4 pb-8 max-w-2xl mx-auto">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-white">My Leagues</h1>
+          <h1 className="text-3xl font-bold text-white">Minhas Ligas</h1>
           {user && (
             <div className="flex gap-2">
               <Button onClick={() => setShowJoin(true)} className="text-sm">
-                Join
+                Entrar
               </Button>
               <LinkButton to="/leagues/new" className="text-sm">
-                Create
+                Criar
               </LinkButton>
             </div>
           )}
@@ -89,7 +89,7 @@ export const Leagues = () => {
 
         {!user && (
           <Card className="mb-6 p-6 text-center">
-            <p className="text-white/70">Sign in to create or join leagues</p>
+            <p className="text-white/70">Faça login para criar ou participar de ligas.</p>
           </Card>
         )}
 
@@ -156,11 +156,11 @@ export const Leagues = () => {
                   />
                   <div className="flex-1 min-w-0">
                     <h3 className="text-lg font-semibold text-white truncate">
-                      FIFA WC 2026 POOL
+                      Bolão Copa 2026
                     </h3>
-                    <p className="text-white/50 text-sm">Global Leaderboard</p>
+                    <p className="text-white/80 text-sm">Classificação Geral</p>
                   </div>
-                  <span className="text-white/30">→</span>
+                  <span className="text-white/80">→</span>
                 </div>
               </Card>
             </button>
@@ -168,11 +168,11 @@ export const Leagues = () => {
             {/* No leagues message */}
             {leagues.length === 0 && user && (
               <Card className="p-6 text-center">
-                <p className="text-white/70 mb-4">
-                  You haven't joined any leagues yet
+                <p className="text-white/80 mb-4">
+                  Você ainda não entrou em nenhuma liga
                 </p>
-                <p className="text-white/50 text-sm">
-                  Create your own league or join one with an invite code
+                <p className="text-white/80 text-sm">
+                  Crie sua própria liga ou participe de uma com um código de convite.
                 </p>
               </Card>
             )}
@@ -201,7 +201,7 @@ export const Leagues = () => {
                       </h3>
                       <p className="text-white/50 text-sm">
                         {league.memberCount}{' '}
-                        {league.memberCount === 1 ? 'member' : 'members'}
+                        {league.memberCount === 1 ? 'Membro' : 'Membros'}
                       </p>
                     </div>
                     <span className="text-white/30">→</span>

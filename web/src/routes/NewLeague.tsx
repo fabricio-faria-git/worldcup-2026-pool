@@ -72,11 +72,11 @@ export const NewLeague = () => {
     const file = e.target.files?.[0];
     if (file) {
       if (!file.type.startsWith('image/')) {
-        setError('Please select an image file');
+        setError('Por favor, selecione um arquivo de imagem.');
         return;
       }
       if (file.size > 5 * 1024 * 1024) {
-        setError('Image must be less than 5MB');
+        setError('A imagem deve ser menor que5MB');
         return;
       }
       setSelectedFile(file);
@@ -117,7 +117,7 @@ export const NewLeague = () => {
 
       void navigate(`/league/${newLeague.slug}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create league');
+      setError(err instanceof Error ? err.message : 'Falha ao criar a liga');
       setSaving(false);
     }
   };
@@ -132,10 +132,10 @@ export const NewLeague = () => {
         <div className="pt-8 px-4 pb-8 max-w-md mx-auto">
           <Card className="p-6 text-center">
             <h1 className="text-2xl font-bold text-white mb-4">
-              Sign in required
+              É necessário fazer login
             </h1>
             <p className="text-white/70">
-              Please sign in to create a league.
+              Faça login para criar uma liga.
             </p>
           </Card>
         </div>
@@ -149,7 +149,7 @@ export const NewLeague = () => {
         <div className="w-full max-w-md">
           <Card className="p-6">
             <h1 className="text-2xl font-bold text-white mb-6 text-center">
-              Create League
+              Criar Liga
             </h1>
 
             <form
@@ -161,7 +161,7 @@ export const NewLeague = () => {
                 <div className="relative">
                   <LeaguePicture
                     src={previewUrl}
-                    name={name || 'New League'}
+                    name={name || 'Nova Liga'}
                     size="xl"
                     className="border-2 border-white/20"
                   />
@@ -169,7 +169,7 @@ export const NewLeague = () => {
                     <Button
                       onClick={handleRemovePhoto}
                       className="absolute px-0! -top-1 -right-1 rounded-full w-8 h-8 backdrop-blur-lg border-none opacity-70 hover:opacity-100"
-                      title="Remove"
+                      title="Remover"
                     >
                       <span className="text-sm">✕</span>
                     </Button>
@@ -187,21 +187,21 @@ export const NewLeague = () => {
                   htmlFor="league-image-upload"
                   className="text-sm text-white/60 hover:text-white cursor-pointer transition-colors"
                 >
-                  {previewUrl ? 'Change Image' : 'Add Image'}
+                  {previewUrl ? 'Change Image' : 'Adicione uma imagem'}
                 </label>
               </div>
 
               {/* League Name */}
               <div>
                 <label htmlFor="name" className={labelClass}>
-                  League Name
+                  Nome da Liga
                 </label>
                 <input
                   id="name"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="My Awesome League"
+                  placeholder="Liga dos Corneteiros"
                   className={inputClass}
                   required
                 />
@@ -256,13 +256,13 @@ export const NewLeague = () => {
               {/* Description */}
               <div>
                 <label htmlFor="description" className={labelClass}>
-                  Description
+                  Descrição
                 </label>
                 <textarea
                   id="description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="What's this league about?"
+                  placeholder="Qual é o objetivo desta liga?"
                   rows={3}
                   className={`${inputClass} resize-none`}
                 />
@@ -276,7 +276,7 @@ export const NewLeague = () => {
                   variant="secondary"
                   className="flex-1"
                 >
-                  Cancel
+                  Cancelar
                 </LinkButton>
                 <Button
                   type="submit"
@@ -290,7 +290,7 @@ export const NewLeague = () => {
                   }
                   className="flex-1"
                 >
-                  {saving ? 'Creating...' : 'Create League'}
+                  {saving ? 'Criando...' : 'Criar Liga'}
                 </Button>
               </div>
             </form>

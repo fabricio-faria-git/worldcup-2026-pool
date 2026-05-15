@@ -63,11 +63,11 @@ export const JoinLeague = () => {
     getLeagueBySlug(slug)
       .then((fetchedLeague) => {
         if (!fetchedLeague) {
-          setError('League not found');
+          setError('Liga não encontrada');
         } else if (
           inviteCode?.toUpperCase() !== fetchedLeague.inviteCode.toUpperCase()
         ) {
-          setError('Invalid invite code');
+          setError('Código inválido');
         } else {
           setLeague(fetchedLeague);
         }
@@ -100,8 +100,8 @@ export const JoinLeague = () => {
         setSelectedLeague(league);
         void navigate(`/league/${league.slug}`, { replace: true });
       } catch (err) {
-        console.error('Error joining league:', err);
-        setError('Failed to join league');
+        console.error('Erro ao entrar na Liga:', err);
+        setError('Falhar ao etrar na Liga');
         setJoining(false);
       }
     };
@@ -147,10 +147,10 @@ export const JoinLeague = () => {
             <div className="text-4xl mb-4">😕</div>
             <h1 className="text-xl font-bold text-white mb-2">{error}</h1>
             <p className="text-white/60 mb-6">
-              This invite link may be invalid or expired.
+              Este link de convite pode ser inválido ou ter expirado..
             </p>
             <Button onClick={() => void navigate('/leagues')}>
-              Go to Leagues
+              Acesse as Ligas
             </Button>
           </Card>
         </div>
@@ -189,7 +189,7 @@ export const JoinLeague = () => {
               className="h-12"
             />
             <span className="text-white font-light text-lg">
-              FIFA WC 2026 POOL
+              Bolão Copa 2026
             </span>
           </div>
 
@@ -208,14 +208,14 @@ export const JoinLeague = () => {
               <p className="text-white/60 mb-6">{league.description}</p>
             )}
             <p className="text-white/50 text-sm mb-6">
-              Sign in to join this league and compete with friends!
+              Faça login para participar desta liga e competir com seus amigos!
             </p>
             <Button
               onClick={handleSignIn}
               disabled={signingIn}
               className="w-full"
             >
-              {signingIn ? 'Signing in...' : 'Sign In with Google'}
+              {signingIn ? 'Entrando...' : 'Entre com Google'}
             </Button>
           </Card>
         </div>

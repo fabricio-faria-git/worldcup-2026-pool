@@ -120,9 +120,9 @@ export const LeagueDetail = () => {
     if (!league || !user || isOwner) return;
 
     const confirmed = await showConfirm({
-      title: 'Leave League',
-      message: 'Are you sure you want to leave this league?',
-      confirmText: 'Leave',
+      title: 'Sair da Liga',
+      message: 'Tem certeza de que deseja sair desta liga?',
+      confirmText: 'Sair',
     });
 
     if (!confirmed) return;
@@ -142,10 +142,10 @@ export const LeagueDetail = () => {
     if (!league || !isOwner) return;
 
     const confirmed = await showConfirm({
-      title: 'Regenerate Invite Code',
+      title: 'Gerar novo código de convite',
       message:
-        "This will invalidate the old invite code. Anyone with the old link won't be able to join.",
-      confirmText: 'Regenerate',
+        "Isso invalidará o código de convite antigo. Quem tiver o link antigo não poderá participar.",
+      confirmText: 'Gerar novo código',
     });
 
     if (!confirmed) return;
@@ -163,14 +163,14 @@ export const LeagueDetail = () => {
 
     // Don't allow removing the owner
     if (userId === league.ownerId) {
-      showToast("Can't remove the league owner", 'error');
+      showToast("Não é possível remover o proprietário da liga.", 'error');
       return;
     }
 
     const confirmed = await showConfirm({
-      title: 'Remove Member',
+      title: 'Remover membro',
       message: `Are you sure you want to remove ${displayName} from this league?`,
-      confirmText: 'Remove',
+      confirmText: 'Remover',
     });
 
     if (!confirmed) return;
@@ -180,7 +180,7 @@ export const LeagueDetail = () => {
       showToast(`${displayName} has been removed from the league`);
     } catch (err) {
       console.error(err);
-      showToast('Failed to remove member', 'error');
+      showToast('Falha ao remover membro.', 'error');
     }
   };
 
@@ -191,7 +191,7 @@ export const LeagueDetail = () => {
 
   const copyShareableLink = () => {
     void navigator.clipboard.writeText(getShareableLink());
-    showToast('Link copied to clipboard');
+    showToast('Link copiado para a área de transferência');
   };
 
   if (loading || !accessChecked) {
@@ -209,7 +209,7 @@ export const LeagueDetail = () => {
     return (
       <AppLayout>
         <div className="pt-8 px-4 pb-8 max-w-2xl mx-auto">
-          <div className="text-center text-white/70 py-20">Redirecting...</div>
+          <div className="text-center text-white/70 py-20">Redirecionando...</div>
         </div>
       </AppLayout>
     );
@@ -221,10 +221,10 @@ export const LeagueDetail = () => {
         <div className="pt-8 px-4 pb-8 max-w-2xl mx-auto">
           <Card className="p-6 text-center">
             <h1 className="text-2xl font-bold text-white mb-4">
-              League not found
+              Liga não encontrada.
             </h1>
             <Link to="/leagues" className="text-white/70 hover:text-white">
-              ← Back to My Leagues
+              ← Voltar para Minhas Ligas
             </Link>
           </Card>
         </div>
@@ -243,7 +243,7 @@ export const LeagueDetail = () => {
               to="/leagues"
               className="text-white/50 hover:text-white text-sm"
             >
-              ← My Leagues
+              ← Minhas Ligas
             </Link>
             {isMember && !isOwner && (
               <Button
@@ -251,7 +251,7 @@ export const LeagueDetail = () => {
                 disabled={leaving}
                 className="text-xs"
               >
-                {leaving ? 'Leaving...' : 'Leave'}
+                {leaving ? 'Saindo...' : 'Sair'}
               </Button>
             )}
             {isOwner && (
@@ -259,7 +259,7 @@ export const LeagueDetail = () => {
                 to={`/league/${league.slug}/edit`}
                 className="text-xs"
               >
-                Edit
+                Editar
               </LinkButton>
             )}
           </div>
@@ -282,16 +282,16 @@ export const LeagueDetail = () => {
           <Card className="p-4 mb-6 overflow-hidden">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-white font-medium">Invite Friends</h3>
+                <h3 className="text-white font-medium">Convidar Amigos</h3>
                 <p className="text-white/50 text-sm">
-                  Share this link to invite others
+                  Compartilhe este link para convidar outras pessoas.
                 </p>
               </div>
               <Button
                 onClick={() => setShowInviteCode(!showInviteCode)}
                 className={`text-xs ${showInviteCode ? 'border-0' : ''}`}
               >
-                {showInviteCode ? '✕' : 'Show Link'}
+                {showInviteCode ? '✕' : 'Mostrar Link'}
               </Button>
             </div>
             {showInviteCode && (
@@ -307,12 +307,12 @@ export const LeagueDetail = () => {
                     onClick={copyShareableLink}
                     className="text-sm w-full"
                   >
-                    Copy Link
+                    Copiar Link
                   </Button>
                 </div>
                 {/* QR Code */}
                 <div className="flex flex-col items-center gap-3 pt-3 border-t border-white/10">
-                  <p className="text-white/50 text-sm">Scan to join</p>
+                  <p className="text-white/50 text-sm">Escaneie para participar</p>
                   <div
                     className="bg-white p-3 rounded-xl"
                     id="qr-code-container"
@@ -346,7 +346,7 @@ export const LeagueDetail = () => {
                 {/* Invite Code */}
                 <div className="flex items-center justify-between pt-3 border-t border-white/10">
                   <span className="text-white/50 text-sm">
-                    Code:{' '}
+                    Código:{' '}
                     <span className="font-mono text-white">
                       {league.inviteCode}
                     </span>
@@ -356,7 +356,7 @@ export const LeagueDetail = () => {
                       onClick={() => void handleRegenerateCode()}
                       className="text-sm"
                     >
-                      Regenerate
+                      Gerar Novo
                     </Button>
                   )}
                 </div>

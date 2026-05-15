@@ -54,12 +54,12 @@ export const EditProfile = () => {
     if (file) {
       // Validate file type
       if (!file.type.startsWith('image/')) {
-        setError('Please select an image file');
+        setError('Por Favor, selecione o arquivo da imagem!');
         return;
       }
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        setError('Image must be less than 5MB');
+        setError('Imagem deve ser menor que 5MB!');
         return;
       }
       setSelectedFile(file);
@@ -144,7 +144,7 @@ export const EditProfile = () => {
       }
       void navigate(`/${finalUserName}`);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to update profile');
+      setError(err instanceof Error ? err.message : 'Falha ao editar perfil');
       setSaving(false);
     }
   };
@@ -157,17 +157,17 @@ export const EditProfile = () => {
     if (ownedLeagues.length > 0) {
       const leagueNames = ownedLeagues.map((l) => l.name).join(', ');
       showToast(
-        `You must delete or transfer ownership of your leagues first: ${leagueNames}`,
+        `Primeiro você precisa excluir ou transferir a propriedade das suas ligas: ${leagueNames}`,
         'error'
       );
       return;
     }
 
     const confirmed = await showConfirm({
-      title: 'Delete Account',
+      title: 'Deletar Conta',
       message:
-        'Are you sure you want to permanently delete your account? This will remove all your data, predictions, and league memberships. This action cannot be undone.',
-      confirmText: 'Delete Account',
+        'Tem certeza de que deseja excluir sua conta permanentemente? Isso removerá todos os seus dados, palpites e participações em ligas. Esta ação é irreversível.',
+      confirmText: 'Deletar Conta',
     });
 
     if (!confirmed) return;
@@ -176,11 +176,11 @@ export const EditProfile = () => {
     try {
       await deleteUserAccount(user.uid, userData.userName);
       await signOut(auth);
-      showToast('Account deleted successfully', 'success');
+      showToast('Conta deletda com sucesso', 'success');
       void navigate('/', { replace: true });
     } catch (err) {
-      console.error('Error deleting account:', err);
-      showToast('Failed to delete account', 'error');
+      console.error('Erro ao deletar a conta:', err);
+      showToast('Falha ao deletar a conta', 'error');
       setDeleting(false);
     }
   };
@@ -201,7 +201,7 @@ export const EditProfile = () => {
         <div className="max-w-md">
           <Card className="p-6">
             <h1 className="text-2xl font-bold text-white mb-6 text-center">
-              Edit Profile
+              Editar Perfil
             </h1>
 
             <form
@@ -239,20 +239,20 @@ export const EditProfile = () => {
                   htmlFor="photo-upload"
                   className="text-sm text-white/60 hover:text-white cursor-pointer transition-colors"
                 >
-                  Change Photo
+                  Trocar Foto
                 </label>
               </div>
 
               <div>
                 <label htmlFor="displayName" className={labelClass}>
-                  Display Name
+                  Nome de Exibição
                 </label>
                 <input
                   id="displayName"
                   type="text"
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
-                  placeholder="Your display name"
+                  placeholder="Seu Nome"
                   className={inputClass}
                   required
                 />
@@ -260,7 +260,7 @@ export const EditProfile = () => {
 
               <div>
                 <label htmlFor="userName" className={labelClass}>
-                  Username
+                  Nome de usuário
                 </label>
                 <div className="relative">
                   <input
@@ -279,34 +279,34 @@ export const EditProfile = () => {
                     onBlur={(e) =>
                       setUserName(sanitizeUsername(e.target.value))
                     }
-                    placeholder="your-username"
+                    placeholder="Seu nome de usuário"
                     className={`${inputClass} ${usernameStatus === 'taken' || usernameStatus === 'reserved' ? 'border-red-400' : usernameStatus === 'available' ? 'border-green-400' : ''}`}
                     required
                     minLength={3}
                   />
                   {usernameStatus === 'checking' && (
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 text-sm">
-                      Checking...
+                      Checando...
                     </span>
                   )}
                   {usernameStatus === 'available' && (
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-green-400 text-sm">
-                      ✓ Available
+                      ✓ Disponível
                     </span>
                   )}
                   {usernameStatus === 'taken' && (
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 text-sm">
-                      ✗ Taken
+                      ✗ Indisponível
                     </span>
                   )}
                   {usernameStatus === 'reserved' && (
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 text-sm">
-                      ✗ Reserved
+                      ✗ Reservado
                     </span>
                   )}
                 </div>
                 <p className="text-white/50 text-xs mt-1">
-                  Letters, numbers, periods, hyphens, and underscores only.
+                  Somente letras, números, pontos, hífens e sublinhados.
                 </p>
               </div>
 
@@ -318,7 +318,7 @@ export const EditProfile = () => {
                   variant="secondary"
                   className="flex-1"
                 >
-                  Cancel
+                  Cancelar
                 </LinkButton>
                 <Button
                   type="submit"
@@ -326,11 +326,11 @@ export const EditProfile = () => {
                   className="flex-1"
                 >
                   {saving ? (
-                    'Saving...'
+                    'Salvando...'
                   ) : (
                     <>
                       <span className="sm:hidden">Save</span>
-                      <span className="hidden sm:inline">Save Changes</span>
+                      <span className="hidden sm:inline">Salvar</span>
                     </>
                   )}
                 </Button>
@@ -344,7 +344,7 @@ export const EditProfile = () => {
                   disabled={deleting}
                   className="text-red-500/70 hover:text-red-400 text-sm transition-colors disabled:opacity-50 hover:cursor-pointer"
                 >
-                  {deleting ? 'Deleting...' : 'Delete my account'}
+                  {deleting ? 'Deletando...' : 'Deletar minha conta'}
                 </button>
               </div>
             </form>

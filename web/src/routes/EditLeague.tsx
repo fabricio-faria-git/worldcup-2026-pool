@@ -50,9 +50,9 @@ export const EditLeague = () => {
     if (!league || !canDelete) return;
 
     const confirmed = await showConfirm({
-      title: 'Delete League',
-      message: `Are you sure you want to permanently delete "${league.name}"? This will remove all members and cannot be undone.`,
-      confirmText: 'Delete League',
+      title: 'Deletar Liga',
+      message: `Tem certeza de que deseja excluir permanentemente "${league.name}"? Isso removerá todos os membros e não poderá ser desfeito.`,
+      confirmText: 'Deletar Liga',
     });
 
     if (!confirmed) return;
@@ -60,11 +60,11 @@ export const EditLeague = () => {
     setDeleting(true);
     try {
       await deleteLeague(league.id, league.slug);
-      showToast('League deleted successfully');
+      showToast('Liga deleta com Sucesso');
       void navigate('/leagues', { replace: true });
     } catch (err) {
       console.error(err);
-      showToast('Failed to delete league', 'error');
+      showToast('Falha ao deletar a liga', 'error');
       setDeleting(false);
     }
   };
@@ -125,11 +125,11 @@ export const EditLeague = () => {
     const file = e.target.files?.[0];
     if (file) {
       if (!file.type.startsWith('image/')) {
-        setError('Please select an image file');
+        setError('Por favor, selecione um arquivo de imagem.');
         return;
       }
       if (file.size > 5 * 1024 * 1024) {
-        setError('Image must be less than 5MB');
+        setError('Imagem deve ser menor que 5MB');
         return;
       }
       setSelectedFile(file);
@@ -177,7 +177,7 @@ export const EditLeague = () => {
 
       void navigate(`/league/${finalSlug}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update league');
+      setError(err instanceof Error ? err.message : 'Falha ao atualizar a liga');
       setSaving(false);
     }
   };
@@ -190,7 +190,7 @@ export const EditLeague = () => {
     return (
       <AppLayout>
         <div className="pt-8 px-4 pb-8 max-w-md mx-auto">
-          <div className="text-center text-white/70 py-20">Loading...</div>
+          <div className="text-center text-white/70 py-20">Carregando...</div>
         </div>
       </AppLayout>
     );
@@ -205,7 +205,7 @@ export const EditLeague = () => {
               League not found
             </h1>
             <Link to="/leagues" className="text-white/70 hover:text-white">
-              ← Back to My Leagues
+              ← Voltar Minhas Ligas
             </Link>
           </Card>
         </div>
@@ -219,16 +219,16 @@ export const EditLeague = () => {
         <div className="pt-8 px-4 pb-8 max-w-md mx-auto">
           <Card className="p-6 text-center">
             <h1 className="text-2xl font-bold text-white mb-4">
-              Not Authorized
+              Não Autorizado
             </h1>
             <p className="text-white/70 mb-4">
-              Only the league owner can edit this league.
+              Somente o proprietário da liga pode editar esta liga.
             </p>
             <Link
               to={`/league/${league.slug}`}
               className="text-white/70 hover:text-white"
             >
-              ← Back to League
+              ← Voltar Liga
             </Link>
           </Card>
         </div>
@@ -242,7 +242,7 @@ export const EditLeague = () => {
         <div className="w-full max-w-md">
           <Card className="p-6">
             <h1 className="text-2xl font-bold text-white mb-6 text-center">
-              Edit League
+              Editar Liga
             </h1>
 
             <form
@@ -280,14 +280,14 @@ export const EditLeague = () => {
                   htmlFor="league-image-upload"
                   className="text-sm text-white/60 hover:text-white cursor-pointer transition-colors"
                 >
-                  Change Image
+                  Trocar Imagem
                 </label>
               </div>
 
               {/* League Name */}
               <div>
                 <label htmlFor="name" className={labelClass}>
-                  League Name
+                  Nome da Liga
                 </label>
                 <input
                   id="name"
@@ -324,22 +324,22 @@ export const EditLeague = () => {
                   />
                   {slugStatus === 'checking' && (
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 text-sm">
-                      Checking...
+                      Checando...
                     </span>
                   )}
                   {slugStatus === 'available' && (
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-green-400 text-sm">
-                      ✓ Available
+                      ✓ Disponível
                     </span>
                   )}
                   {slugStatus === 'taken' && (
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 text-sm">
-                      ✗ Taken
+                      ✗ Indisponível
                     </span>
                   )}
                   {slugStatus === 'invalid' && (
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 text-sm">
-                      ✗ Too short
+                      ✗ Muito curto
                     </span>
                   )}
                 </div>
@@ -348,13 +348,13 @@ export const EditLeague = () => {
               {/* Description */}
               <div>
                 <label htmlFor="description" className={labelClass}>
-                  Description
+                  Descrição
                 </label>
                 <textarea
                   id="description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="What's this league about?"
+                  placeholder="Qual é o objetivo desta liga?"
                   rows={3}
                   className={`${inputClass} resize-none`}
                 />
@@ -368,7 +368,7 @@ export const EditLeague = () => {
                   variant="secondary"
                   className="flex-1"
                 >
-                  Cancel
+                  Cancelar
                 </LinkButton>
                 <Button
                   type="submit"
@@ -383,7 +383,7 @@ export const EditLeague = () => {
                   }
                   className="flex-1"
                 >
-                  {saving ? 'Saving...' : 'Save'}
+                  {saving ? 'Salvando...' : 'Salvar'}
                 </Button>
               </div>
 
@@ -396,7 +396,7 @@ export const EditLeague = () => {
                     disabled={deleting}
                     className="text-sm text-red-400/70 hover:text-red-400 transition-colors disabled:opacity-50 hover:cursor-pointer"
                   >
-                    {deleting ? 'Deleting...' : 'Delete this league'}
+                    {deleting ? 'Deletando...' : 'Deletar essa Liga'}
                   </button>
                 </div>
               )}

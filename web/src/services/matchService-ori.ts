@@ -19,7 +19,7 @@ const teamTranslations: Record<string, string> = {
   Belgium: 'Bélgica',
   'Bosnia and Herzegovina': 'Bósnia e Herzegovina',
   Croatia: 'Croácia',
-  Czechia: 'República Tcheca',
+  Czechia: 'Repubica Tcheca',
   England: 'Inglaterra',
   France: 'França',
   Germany: 'Alemanha',
@@ -32,29 +32,29 @@ const teamTranslations: Record<string, string> = {
   Switzerland: 'Suíça',
   Türkiye: 'Turquia',
   Algeria: 'Argélia',
-  'Cape Verde': 'Cabo Verde',
-  'Congo DR': 'Congo',
+  "Cape Verde": 'Cabo Verde',
+  "Congo DR": 'Congo',
   "Côte d'Ivoire": 'Costa do Marfim',
   Egypt: 'Egito',
   Ghana: 'Gana',
   Morocco: 'Marrocos',
   Senegal: 'Senegal',
-  'South Africa': 'África do Sul',
+  "South Africa": 'África do Sul',
   Tunisia: 'Tunísia',
   Australia: 'Austrália',
-  'IR Iran': 'Irã',
+  "IR Iran": 'Irã',
   Iraq: 'Iraque',
   Japan: 'Japão',
   Jordan: 'Jordânia',
-  'Korea Republic': 'Coreia do Sul',
+  "Korea Republic": 'Coreia do Sul',
   Qatar: 'Catar',
-  'Saudi Arabia': 'Arábia Saudita',
+  "Saudi Arabia": 'Arábia Saudita',
   Uzbekistan: 'Uzbequistão',
   Curaçao: 'Curaçau',
   Haiti: 'Haiti',
   Panama: 'Panamá',
-  'New Zealand': 'Nova Zelândia',
-};
+  "New Zealand": 'Nova Zelândia',
+  };
 
 const translateTeam = (name: string): string => {
   return teamTranslations[name] || name;
@@ -110,6 +110,9 @@ interface FifaApiResponse {
   Results: FifaApiMatch[];
 }
 
+/**
+ * Fetch matches from the FIFA API and transform them
+ */
 const fetchFromFifaApi = async (): Promise<MatchesData> => {
   const url = new URL(FIFA_API_URL);
   url.searchParams.set('idseason', SEASON_ID);
@@ -117,7 +120,6 @@ const fetchFromFifaApi = async (): Promise<MatchesData> => {
   url.searchParams.set('count', '500');
 
   const response = await fetch(url.toString());
-
   if (!response.ok) {
     throw new Error(`FIFA API error: ${response.status}`);
   }
@@ -126,30 +128,29 @@ const fetchFromFifaApi = async (): Promise<MatchesData> => {
   return transformFifaData(data.Results);
 };
 
+/**
+ * Transform FIFA API data to our Match format
+ */
 const transformFifaData = (results: FifaApiMatch[]): MatchesData => {
   const matches: MatchesData = {};
 
   results.forEach((item, index) => {
     const game = index + 1;
     const round = item.StageName?.[0]?.Description ?? '';
-
     const group =
       item.GroupName?.[0]?.Description?.replace('Groupo ', '') ?? null;
-
     const home = item.Home?.Abbreviation ?? item.PlaceHolderA;
-
     const homeName = translateTeam(
-      item.Home?.ShortClubName ?? item.PlaceHolderA
-    );
-
+                     item.Home?.ShortClubName ?? item.PlaceHolderA
+                     );
     const away = item.Away?.Abbreviation ?? item.PlaceHolderB;
-
     const awayName = translateTeam(
-      item.Away?.ShortClubName ?? item.PlaceHolderB
-    );
+                     item.Away?.ShortClubName ?? item.PlaceHolderB
+                     );
 
-    matches[game] = {
-      game,
+    matches[const awayName = translateTeam(
+  item.Away?.ShortClubName ?? item.PlaceHolderB
+);
       fifaId: item.IdMatch,
       round,
       group,
@@ -170,25 +171,33 @@ const transformFifaData = (results: FifaApiMatch[]): MatchesData => {
   return matches;
 };
 
+/**
+ * Fetch all matches from the database
+ * If matches don't exist, fetch from FIFA API and initialize
+ */
 export const fetchMatches = async (): Promise<MatchesData> => {
   const matchesRef = ref(db, 'matches');
   const snapshot = await get(matchesRef);
 
   if (!snapshot.exists()) {
+    // Fetch from FIFA API and initialize
     const matches = await fetchFromFifaApi();
-
+    // Try to save to database (requires admin), but don't fail if permission denied
     try {
       await set(matchesRef, matches);
     } catch (err) {
-      console.warn('Could not save matches to database:', err);
+      console.warn('Could not save matches to database (admin required):', err);
     }
-
     return matches;
   }
 
   return snapshot.val() as MatchesData;
 };
 
+/**
+ * Force refresh matches from FIFA API
+ * Useful for updating scores during the tournament
+ */
 export const refreshMatches = async (): Promise<MatchesData> => {
   const matches = await fetchFromFifaApi();
   const matchesRef = ref(db, 'matches');
@@ -196,9 +205,10 @@ export const refreshMatches = async (): Promise<MatchesData> => {
   return matches;
 };
 
-export const getMatch = async (
-  gameNumber: string
-): Promise<Match | null> => {
+/**
+ * Get a single match by game number
+ */
+export const getMatch = async (gameNumber: string): Promise<Match | null> => {
   const matchRef = ref(db, `matches/${gameNumber}`);
   const snapshot = await get(matchRef);
 

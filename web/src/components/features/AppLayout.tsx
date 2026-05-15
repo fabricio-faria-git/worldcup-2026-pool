@@ -20,10 +20,10 @@ export const AppLayout = ({ children, className = '' }: AppLayoutProps) => {
     {
       to: userData ? `/${userData.userName}` : '/',
       icon: '⚽',
-      label: userData ? 'My Predictions' : 'All Matches',
+      label: userData ? 'Meus Palpites' : 'Todos os Jogos',
     },
-    { to: '/leaderboard', icon: '🥇', label: 'Leaderboard' },
-    { to: '/leagues', icon: '🏆', label: 'Leagues' },
+    { to: '/leaderboard', icon: '🥇', label: 'Classificação' },
+    { to: '/leagues', icon: '🏆', label: 'Ligas' },
   ];
 
   // Fallback: hide splash after 1 second (for pages without data loading)
@@ -81,7 +81,7 @@ export const AppLayout = ({ children, className = '' }: AppLayoutProps) => {
                       className="h-8"
                     />
                     <span className="text-white font-light text-xs">
-                      FIFA WC 2026 POOL
+                      Bolão Copa 2026
                     </span>
                   </>
                 )}
