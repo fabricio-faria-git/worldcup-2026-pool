@@ -1,5 +1,5 @@
 import { AppLayout, Card } from '../components';
-import { createdByPic, worldcupLogo } from '../assets';
+import { worldcupLogo } from '../assets';
 
 export const About = () => {
   return (
