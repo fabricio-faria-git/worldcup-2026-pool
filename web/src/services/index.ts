@@ -1,5 +1,6 @@
 export { fetchMatches, getMatch, refreshMatches } from './matchService';
 export type { Match, MatchesData } from './matchService';
+export { simulateResults } from './simulateResults';
 
 export {
   checkUsernameAvailable,

@@ -16,6 +16,7 @@ import {
   type LeagueWithId,
 } from '../services';
 
+
 export const Leagues = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -28,18 +29,62 @@ export const Leagues = () => {
   const [joining, setJoining] = React.useState(false);
 
   React.useEffect(() => {
-    if (!user) {
-      setLoading(false);
-      return;
-    }
 
-    const unsubscribe = subscribeToUserLeagues(user.uid, (userLeagues) => {
-      setLeagues(userLeagues);
-      setLoading(false);
-    });
+  console.log("LEAGUES EFFECT")
 
-    return () => unsubscribe();
-  }, [user]);
+  if (!user) {
+    console.log("SEM USER")
+
+    setLoading(false)
+    return
+  }
+
+  try{
+
+    const unsubscribe=
+      subscribeToUserLeagues(
+        user.uid,
+        (userLeagues)=>{
+
+          console.log(
+            "LIGAS RECEBIDAS",
+            userLeagues
+          )
+
+          setLeagues(
+            userLeagues || []
+          )
+
+          setLoading(false)
+
+        }
+      )
+
+    // segurança:
+    setTimeout(()=>{
+
+      console.log(
+        "TIMEOUT DE SEGURANÇA"
+      )
+
+      setLoading(false)
+
+    },5000)
+
+    return ()=>unsubscribe()
+
+  }catch(e){
+
+    console.error(
+      "ERRO LEAGUES",
+      e
+    )
+
+    setLoading(false)
+
+  }
+
+},[user]);
 
   const handleJoinLeague = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,0 +1,31 @@
+import { recalculateRanking } from '../services/recalculateRanking';
+
+export function Recalculate() {
+
+  const executar = async () => {
+    try {
+      console.log('iniciando');
+
+      await recalculateRanking();
+
+      console.log('fim');
+
+      alert('Ranking recalculado');
+    } catch (e) {
+      console.error('ERRO COMPLETO:', e);
+
+      alert(
+        'Erro: ' +
+        (e instanceof Error ? e.message : JSON.stringify(e))
+      );
+    }
+  };
+
+  return (
+    <div style={{padding:'20px'}}>
+      <button onClick={executar}>
+        Recalcular
+      </button>
+    </div>
+  );
+}
