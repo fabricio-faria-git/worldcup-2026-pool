@@ -1,85 +1,148 @@
 import { db } from '../firebase';
-import { ref, get, set, onValue, type Unsubscribe } from 'firebase/database';
+import {
+  ref,
+  get,
+  set,
+  onValue,
+  type Unsubscribe
+} from 'firebase/database';
 
 export interface Prediction {
-  homePrediction: number;
-  awayPrediction: number;
-  points: number;
-  updatedAt: number;
+  homePrediction:number;
+  awayPrediction:number;
+  points:number;
+  updatedAt:number;
 }
 
-export interface UserPredictions {
-  [gameId: string]: Prediction;
+export interface UserPredictions{
+  [gameId:string]:Prediction
 }
 
 /**
- * Get all predictions for a user
+ * Buscar todos os palpites do usuário
  */
-export const getUserPredictions = async (
-  userId: string
-): Promise<UserPredictions> => {
-  const predictionsRef = ref(db, `predictions/${userId}`);
-  const snapshot = await get(predictionsRef);
+export const getUserPredictions=async(
+  userId:string
+):Promise<UserPredictions>=>{
 
-  if (!snapshot.exists()) {
+  const predictionsRef=
+    ref(db,`predictions/${userId}`);
+
+  const snapshot=
+    await get(predictionsRef);
+
+  if(!snapshot.exists()){
     return {};
   }
 
-  return snapshot.val() as UserPredictions;
+  return snapshot.val();
 };
 
 /**
- * Get a single prediction for a user and game
+ * Buscar palpite individual
  */
-export const getPrediction = async (
-  userId: string,
-  gameId: number
-): Promise<Prediction | null> => {
-  const predictionRef = ref(db, `predictions/${userId}/${gameId}`);
-  const snapshot = await get(predictionRef);
+export const getPrediction=async(
+  userId:string,
+  gameId:number
+):Promise<Prediction|null>=>{
 
-  if (!snapshot.exists()) {
+  const predictionRef=
+    ref(
+      db,
+      `predictions/${userId}/${gameId}`
+    );
+
+  const snapshot=
+    await get(predictionRef);
+
+  if(!snapshot.exists()){
     return null;
   }
 
-  return snapshot.val() as Prediction;
+  return snapshot.val();
 };
 
 /**
- * Save or update a prediction
+ * Salva palpite
  */
-export const savePrediction = async (
-  userId: string,
-  gameId: number,
-  homePrediction: number,
-  awayPrediction: number
-): Promise<void> => {
-  const predictionRef = ref(db, `predictions/${userId}/${gameId}`);
+export const savePrediction=async(
+  userId:string,
+  gameId:number,
+  homePrediction:number,
+  awayPrediction:number
+):Promise<void>=>{
 
-  const prediction: Prediction = {
+  const predictionRef=
+    ref(
+      db,
+      `predictions/${userId}/${gameId}`
+    );
+
+  const prediction:Prediction={
+
     homePrediction,
     awayPrediction,
-    points: 0, // Points will be calculated by Cloud Function
-    updatedAt: Date.now(),
+
+    points:0,
+
+    updatedAt:Date.now()
   };
 
-  await set(predictionRef, prediction);
+  await set(
+    predictionRef,
+    prediction
+  );
+
+  console.log(
+    'Palpite salvo. Recalculando ranking...'
+  );
+
+  // recalcula automaticamente
+  const {
+    recalculateRanking
+  }=await import(
+    './scoreService'
+  );
+
+  await recalculateRanking();
+
+  console.log(
+    'Ranking recalculado'
+  );
 };
 
 /**
- * Subscribe to real-time updates for a user's predictions
+ * Atualização em tempo real
  */
-export const subscribeToPredictions = (
-  userId: string,
-  callback: (predictions: UserPredictions) => void
-): Unsubscribe => {
-  const predictionsRef = ref(db, `predictions/${userId}`);
+export const subscribeToPredictions=(
+  userId:string,
+  callback:(
+    predictions:UserPredictions
+  )=>void
+):Unsubscribe=>{
 
-  return onValue(predictionsRef, (snapshot) => {
-    if (snapshot.exists()) {
-      callback(snapshot.val() as UserPredictions);
-    } else {
-      callback({});
+  const predictionsRef=
+    ref(
+      db,
+      `predictions/${userId}`
+    );
+
+  return onValue(
+    predictionsRef,
+    snapshot=>{
+
+      if(snapshot.exists()){
+
+        callback(
+          snapshot.val()
+        );
+
+      }else{
+
+        callback({});
+
+      }
+
     }
-  });
+  );
 };

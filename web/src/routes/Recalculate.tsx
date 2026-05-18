@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { getDatabase, ref, get, set } from 'firebase/database'
+import { simulateResults } from '../services/simulateResults'
 
 declare global {
   interface Window {
@@ -157,28 +158,51 @@ export function Recalculate(){
 
   return(
 
-    <div
-      style={{
-        minHeight:'100vh',
-        background:'#000',
-        color:'white',
-        padding:'50px'
+<div
+  style={{
+    minHeight:'100vh',
+    background:'#000',
+    color:'white',
+    padding:'50px'
+  }}
+>
+
+  <h1>{status}</h1>
+
+  <div
+    style={{
+      display:'flex',
+      gap:'10px'
+    }}
+  >
+
+    <button
+      onClick={executar}
+    >
+      Recalcular
+    </button>
+
+    <button
+      onClick={async()=>{
+
+        setStatus(
+          'Simulando...'
+        )
+
+        await simulateResults()
+
+        setStatus(
+          'Simulação concluída ✅'
+        )
+
       }}
     >
+      Simular Jogos
+    </button>
 
-      <h1>{status}</h1>
+  </div>
 
-      <button
-        onClick={executar}
-        style={{
-          padding:'12px 20px',
-          cursor:'pointer'
-        }}
-      >
-        Executar novamente
-      </button>
-
-    </div>
+</div>
 
   )
 
