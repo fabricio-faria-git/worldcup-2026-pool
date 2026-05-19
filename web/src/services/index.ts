@@ -1,6 +1,8 @@
 export { fetchMatches, getMatch, refreshMatches } from './matchService';
 export type { Match, MatchesData } from './matchService';
 export { simulateResults } from './simulateResults';
+export { generateMockUsers, clearMockUsers, getMockUserCount} from './devService'
+export { clearResults } from './clearResults'
 
 export {
   checkUsernameAvailable,

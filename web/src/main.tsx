@@ -25,9 +25,12 @@ import {
   NewLeague,
   Rules,
   UserProfile,
+  
 } from './routes';
 
 import { Recalculate } from './routes/Recalculate';
+import AdminRoute from './routes/AdminRoute';
+import Admin from './pages/Admin';
 
 // função splash
 declare global {
@@ -111,6 +114,15 @@ element={
 <Route
 path="/recalculate"
 element={<Recalculate />}
+/>
+
+<Route
+ path="/admin"
+ element={
+   <AdminRoute>
+      <Admin/>
+   </AdminRoute>
+ }
 />
 
 <Route

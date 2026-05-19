@@ -21,7 +21,9 @@ export const MatchesByGroup = ({
   // Group matches by group (or round if group is null)
   const groupedMatches = Object.values(matches).reduce<Record<string, Match[]>>(
     (acc, match) => {
-      const groupKey = match.group ? `Groupo ${match.group}` : match.round;
+      const groupKey = match.group
+  ? `Grupo ${match.group.replace('Group ', '')}`
+  : match.round;
 
       if (!acc[groupKey]) {
         acc[groupKey] = [];

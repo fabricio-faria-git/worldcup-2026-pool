@@ -9,3 +9,5 @@ export { Leagues } from './Leagues';
 export { NewLeague } from './NewLeague';
 export { Rules } from './Rules';
 export { UserProfile } from './UserProfile';
+export { default as AdminRoute } from './AdminRoute';
+

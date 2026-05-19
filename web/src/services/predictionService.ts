@@ -1,45 +1,56 @@
-import { db } from '../firebase';
 import {
   ref,
   get,
   set,
   onValue,
   type Unsubscribe
-} from 'firebase/database';
+} from 'firebase/database'
 
-export interface Prediction {
-  homePrediction:number;
-  awayPrediction:number;
-  points:number;
-  updatedAt:number;
+import { db } from '../firebase'
+
+import { getMatch } from './matchService'
+
+export interface Prediction{
+  homePrediction:number
+  awayPrediction:number
+  points:number
+  updatedAt:number
 }
 
 export interface UserPredictions{
   [gameId:string]:Prediction
 }
 
+
 /**
- * Buscar todos os palpites do usuário
+ * busca todos os palpites do usuário
  */
 export const getUserPredictions=async(
   userId:string
 ):Promise<UserPredictions>=>{
 
   const predictionsRef=
-    ref(db,`predictions/${userId}`);
+    ref(
+      db,
+      `predictions/${userId}`
+    )
 
   const snapshot=
-    await get(predictionsRef);
+    await get(predictionsRef)
 
   if(!snapshot.exists()){
-    return {};
+
+    return {}
+
   }
 
-  return snapshot.val();
-};
+  return snapshot.val()
+
+}
+
 
 /**
- * Buscar palpite individual
+ * busca palpite específico
  */
 export const getPrediction=async(
   userId:string,
@@ -50,20 +61,24 @@ export const getPrediction=async(
     ref(
       db,
       `predictions/${userId}/${gameId}`
-    );
+    )
 
   const snapshot=
-    await get(predictionRef);
+    await get(predictionRef)
 
   if(!snapshot.exists()){
-    return null;
+
+      return null
+
   }
 
-  return snapshot.val();
-};
+  return snapshot.val()
+
+}
+
 
 /**
- * Salva palpite
+ * salva palpite
  */
 export const savePrediction=async(
   userId:string,
@@ -72,77 +87,120 @@ export const savePrediction=async(
   awayPrediction:number
 ):Promise<void>=>{
 
+  /*
+    valida se jogo ainda aceita
+    palpites
+  */
+
+  const match=
+    await getMatch(gameId)
+
+  if(match){
+
+      const kickoffTime=
+        new Date(
+          match.date
+        ).getTime()
+
+      const cutoffTime=
+        kickoffTime-
+        (10*60*1000)
+
+      if(
+        Date.now()>=
+        cutoffTime
+      ){
+
+          throw new Error(
+            'Palpites encerrados'
+          )
+
+      }
+
+  }
+
   const predictionRef=
     ref(
       db,
       `predictions/${userId}/${gameId}`
-    );
+    )
 
   const prediction:Prediction={
 
-    homePrediction,
-    awayPrediction,
+      homePrediction,
 
-    points:0,
+      awayPrediction,
 
-    updatedAt:Date.now()
-  };
+      points:0,
+
+      updatedAt:
+        Date.now()
+
+  }
 
   await set(
-    predictionRef,
-    prediction
-  );
+      predictionRef,
+      prediction
+  )
 
-  console.log(
-    'Palpite salvo. Recalculando ranking...'
-  );
+  /*
+    recalcula ranking
+    automaticamente
+  */
 
-  // recalcula automaticamente
   const {
-    recalculateRanking
+      recalculateRanking
   }=await import(
-    './scoreService'
-  );
+      './scoreService'
+  )
 
-  await recalculateRanking();
+  await recalculateRanking()
 
-  console.log(
-    'Ranking recalculado'
-  );
-};
+}
+
 
 /**
- * Atualização em tempo real
+ * realtime
  */
 export const subscribeToPredictions=(
+
   userId:string,
+
   callback:(
-    predictions:UserPredictions
+      predictions:
+      UserPredictions
   )=>void
+
 ):Unsubscribe=>{
 
   const predictionsRef=
     ref(
       db,
       `predictions/${userId}`
-    );
+    )
 
   return onValue(
-    predictionsRef,
-    snapshot=>{
 
-      if(snapshot.exists()){
+      predictionsRef,
 
-        callback(
-          snapshot.val()
-        );
+      (snapshot)=>{
 
-      }else{
+          if(
+            snapshot.exists()
+          ){
 
-        callback({});
+            callback(
+              snapshot.val()
+            )
+
+          }else{
+
+            callback({})
+
+          }
 
       }
 
-    }
-  );
-};
+  )
+
+}

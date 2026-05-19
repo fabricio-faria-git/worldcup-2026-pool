@@ -35,7 +35,7 @@ export const DevToolsPanel = () => {
     setLoading(actionName);
     try {
       const count = await action();
-      showToast(successMessage(count), 'success');
+      showToast(successMessage(count), 'successo');
       // Refresh mock count
       const newCount = await getMockUserCount();
       setMockCount(newCount);
@@ -79,7 +79,7 @@ export const DevToolsPanel = () => {
           <div className="p-4 space-y-3">
             {/* Mock user count */}
             <div className="text-sm text-white/70">
-              Mock users in DB:{' '}
+              Usuários Fakes no Banco:{' '}
               <span className="text-white font-bold">{mockCount}</span>
             </div>
 
@@ -96,7 +96,7 @@ export const DevToolsPanel = () => {
                 disabled={loading !== null}
                 className="w-full text-sm"
               >
-                {loading === 'generate' ? 'Creating...' : '➕ Add 5 Mock Users'}
+                {loading === 'generate' ? 'Creating...' : '➕ Adicionar 5 usuários Fakes'}
               </Button>
 
               <Button
@@ -111,13 +111,13 @@ export const DevToolsPanel = () => {
                 variant="secondary"
                 className="w-full text-sm text-red-400 hover:text-red-300"
               >
-                {loading === 'clear' ? 'Clearing...' : '🗑️ Clear Mock Users'}
+                {loading === 'clear' ? 'Clearing...' : '🗑️ Limpar usuários Fakes'}
               </Button>
             </div>
 
             {/* Warning */}
             <div className="text-xs text-yellow-500/70 mt-4 mb-2 text-center">
-              ⚠️ Only visible in dev mode for admins
+              ⚠️ Visível apenas no modo de desenvolvedor para admins
             </div>
           </div>
         </div>
