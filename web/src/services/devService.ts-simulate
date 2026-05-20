@@ -10,7 +10,6 @@ import {
 import type { UserData } from './userService';
 import type { MatchesData } from './matchService';
 import type { Prediction } from './predictionService';
-import { recalculateRanking } from './scoreService';
 
 // [firstName, lastName]
 const MOCK_NAMES: [string, string][] = [
@@ -184,89 +183,52 @@ export const getMockUserCount =
  * Simula resultados para jogos passados
  */
 export const simulateResults =
-async ():Promise<number> => {
-
-  const snapshot =
-    await get(
-      ref(db,'matches')
+  async (): Promise<number> => {
+    const snapshot = await get(
+      ref(db, 'matches')
     );
 
-  if(
-    !snapshot.exists()
-  ){
-    return 0;
-  }
+    if (!snapshot.exists()) return 0;
 
-  const matches =
-    snapshot.val();
+    const matches =
+      snapshot.val() as MatchesData;
 
-  let updated=0;
+    let updatedCount = 0;
 
-  const now=Date.now();
+    for (const [matchId, match] of Object.entries(
+      matches
+    )) {
+      // ignora jogos que já têm placar
 
-  for(
-    const [matchId,match]
-    of Object.entries<any>(matches)
-  ){
+      if (
+        match.homeScore != null &&
+        match.awayScore != null
+      ) {
+        continue;
+      }
 
-    const kickoff=
-      match.timestamp;
-
-    // jogo futuro:
-    // mantém sem resultado
-    if(
-      kickoff>now
-    ){
+      if (match.timestamp > Date.now()) {
+        continue;
+      }
 
       await update(
-        ref(
-          db,
-          `matches/${matchId}`
-        ),
+        ref(db, `matches/${matchId}`),
         {
-          homeScore:-1,
-          awayScore:-1,
-          finished:false
+          homeScore: Math.floor(
+            Math.random() * 6
+          ),
+          awayScore: Math.floor(
+            Math.random() * 6
+          ),
         }
       );
 
-      continue;
+      updatedCount++;
     }
 
-    // jogo já passou:
-    // gera placar aleatório
+    return updatedCount;
+  };
 
-    await update(
-      ref(
-        db,
-        `matches/${matchId}`
-      ),
-      {
-        homeScore:
-          Math.floor(
-            Math.random()*6
-          ),
-
-        awayScore:
-          Math.floor(
-            Math.random()*6
-          ),
-
-        finished:true
-      }
-    );
-
-    updated++;
-  }
-
-  console.log(
-    `${updated} jogos simulados`
-  );
-
-  await recalculateRanking();
-
-  return updated;
-};
 /**
  * Remove resultados
  */
@@ -304,3 +266,136 @@ export const clearResults =
 
     return count;
   };
+
+export const recalculateRanking = async (): Promise<void> => {
+  const usersSnap = await get(ref(db, 'users'));
+  const predictionsSnap = await get(ref(db, 'predictions'));
+  const matchesSnap = await get(ref(db, 'matches'));
+
+  if (
+    !usersSnap.exists() ||
+    !predictionsSnap.exists() ||
+    !matchesSnap.exists()
+  ) {
+    return;
+  }
+
+  const users = usersSnap.val();
+  const predictions = predictionsSnap.val();
+  const matches = matchesSnap.val();
+
+  const updates: Record<string, any> = {};
+
+  const getWinner = (
+    home: number,
+    away: number
+  ) => {
+    if (home > away) return 'home';
+    if (home < away) return 'away';
+
+    return 'tied';
+  };
+
+  const calculatePoints = (
+    homeScore: number,
+    awayScore: number,
+    homePrediction: number,
+    awayPrediction: number
+  ) => {
+
+    if (
+      homeScore == null ||
+      awayScore == null
+    ) {
+      return 0;
+    }
+
+    // placar exato
+    if (
+      homeScore === homePrediction &&
+      awayScore === awayPrediction
+    ) {
+      return 15;
+    }
+
+    // vencedor correto
+    if (
+      getWinner(
+        homeScore,
+        awayScore
+      ) ===
+      getWinner(
+        homePrediction,
+        awayPrediction
+      )
+    ) {
+
+      const diff =
+        Math.abs(
+          homePrediction-homeScore
+        ) +
+        Math.abs(
+          awayPrediction-awayScore
+        );
+
+      return Math.max(
+        0,
+        10-diff
+      );
+    }
+
+    return 0;
+  };
+
+  for (const userId in users) {
+
+    let total = 0;
+
+    const userPreds =
+      predictions?.[userId] || {};
+
+    for (
+      const matchId in userPreds
+    ) {
+
+      const prediction =
+        userPreds[matchId];
+
+      const match =
+        matches?.[matchId];
+
+      if (!match) continue;
+
+      const points =
+        calculatePoints(
+          match.homeScore,
+          match.awayScore,
+          prediction.homePrediction,
+          prediction.awayPrediction
+        );
+
+      total += points;
+
+      updates[
+        `predictions/${userId}/${matchId}/points`
+      ] = points;
+    }
+
+    updates[
+      `users/${userId}/score`
+    ] = total;
+
+    updates[
+      `rankings/${userId}`
+    ] = total;
+  }
+
+  await update(
+    ref(db),
+    updates
+  );
+
+  console.log(
+    'Ranking recalculado'
+  );
+};

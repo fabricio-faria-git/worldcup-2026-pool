@@ -20,7 +20,15 @@ const calculatePoints = (
   awayPrediction:number
 )=>{
 
-  if(homeScore<0){
+  // jogo ainda sem resultado
+  if(
+    homeScore == null ||
+    awayScore == null ||
+    homeScore === undefined ||
+    awayScore === undefined ||
+    homeScore < 0 ||
+    awayScore < 0
+  ){
     return 0
   }
 
@@ -38,7 +46,6 @@ const calculatePoints = (
       homeScore,
       awayScore
     )===
-
     getWinner(
       homePrediction,
       awayPrediction
@@ -46,13 +53,10 @@ const calculatePoints = (
   ){
 
     const diff=
-
       Math.abs(
         homePrediction-homeScore
       )
-
       +
-
       Math.abs(
         awayPrediction-awayScore
       )
@@ -65,7 +69,6 @@ const calculatePoints = (
 
   return 0
 }
-
 export const recalculateRanking =
 async()=>{
 
@@ -115,6 +118,16 @@ async()=>{
       if(!m){
         continue
       }
+	    console.log({
+    userId,
+    matchId,
+
+    homeScore:m?.homeScore,
+    awayScore:m?.awayScore,
+
+    homePrediction:p?.homePrediction,
+    awayPrediction:p?.awayPrediction
+  })
 
       const points=
         calculatePoints(

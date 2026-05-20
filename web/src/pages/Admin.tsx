@@ -1,191 +1,367 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react';
 
 import {
- generateMockUsers,
- clearMockUsers,
- getMockUserCount
-} from '../services'
+  generateMockUsers,
+  clearMockUsers,
+  getMockUserCount,
+  simulateResults,
+  clearResults,
+} from '../services/devService';
 
-export default function Admin(){
+import {
+  recalculateRanking
+} from '../services';
 
- const [loading,setLoading]=useState(true)
+export default function Admin() {
 
- const [mockCount,setMockCount]=useState(0)
+  const initialized =
+    useRef(false);
 
- const [working,setWorking]=useState(false)
+  const [loading,setLoading] =
+    useState(true);
 
-useEffect(()=>{
+  const [mockCount,setMockCount] =
+    useState(0);
 
-  if(window.hideSplash){
-     window.hideSplash()
-  }
+  const [
+    actionLoading,
+    setActionLoading
+  ]=
+    useState<string|null>(null);
 
-  async function load(){
+  console.log(
+    'ADMIN RENDER'
+  );
 
-      try{
+  const loadData=
+  async()=>{
 
-         const total=
-           await getMockUserCount()
-
-         setMockCount(total)
-
-      }finally{
-
-         setLoading(false)
-      }
-  }
-
-  load()
-
-},[])
-
- console.log(
-   "render final",
-   {loading,mockCount}
- )
-
- if(loading){
-
-   return(
-      <div className="p-8">
-        Carregando...
-      </div>
-   )
- }
-
- const createMocks=async()=>{
-
-    setWorking(true)
+    console.log(
+      'loadData iniciou'
+    );
 
     try{
-
-      await generateMockUsers(10)
 
       const total=
-        await getMockUserCount()
+        await getMockUserCount();
 
-      setMockCount(total)
+      console.log(
+        'TOTAL:',
+        total
+      );
+
+      setMockCount(
+        total
+      );
+
+    }catch(err){
+
+      console.error(
+        err
+      );
 
     }finally{
 
-      setWorking(false)
+      setLoading(
+        false
+      );
+
+      console.log(
+        'loading false'
+      );
     }
- }
+  };
 
- const clearMocks=async()=>{
+  useEffect(()=>{
 
-    setWorking(true)
+    console.log(
+      'useEffect'
+    );
+
+    if(
+      initialized.current
+    ){
+      console.log(
+        'já inicializado'
+      );
+
+      return;
+    }
+
+    initialized.current=
+      true;
+
+    loadData();
+
+  },[]);
+
+  const runAction=
+  async(
+    action:string,
+    callback:()=>Promise<void>
+  )=>{
 
     try{
 
-      await clearMockUsers()
+      setActionLoading(
+        action
+      );
 
-      setMockCount(0)
+      await callback();
+
+      await loadData();
+
+    }catch(e){
+
+      console.error(
+        e
+      );
+
+      alert(
+        'Erro ao executar ação'
+      );
 
     }finally{
 
-      setWorking(false)
+      setActionLoading(
+        null
+      );
     }
- }
+  };
 
- return(
+  console.log(
+    'RENDER FINAL',
+    {
+      loading,
+      mockCount,
+      actionLoading
+    }
+  );
 
-<div className="flex flex-wrap gap-4">
+  if(
+    loading
+  ){
 
-<button
-onClick={createMocks}
-disabled={working}
-className="bg-green-700 px-4 py-2 rounded"
->
-Criar Fakes
-</button>
+    return(
 
-<button
-onClick={clearMocks}
-disabled={working}
-className="bg-red-700 px-4 py-2 rounded"
->
-Limpar Fakes
-</button>
+      <div className="
+      p-8
+      text-white
+      ">
 
-<button
-onClick={async()=>{
+        Carregando painel...
 
- setWorking(true)
+      </div>
+    )
+  }
 
- try{
+  return(
 
-   const {
-      simulateResults
-   }=await import('../services')
+    <div className="
+    max-w-5xl
+    mx-auto
+    p-8
+    text-white
+    ">
 
-   await simulateResults()
+      <h1 className="
+      text-3xl
+      font-bold
+      mb-8
+      ">
+        Administração
+      </h1>
 
- }finally{
+      <div className="
+      mb-8
+      p-2
+	  w-48
+      rounded
+      bg-zinc-900
+      ">
 
-   setWorking(false)
- }
+        <div className="
+        text-xl
+		text-center
+        ">
 
-}}
-className="bg-blue-700 px-4 py-2 rounded"
->
-Simular resultados
-</button>
+          Fakes: {' '}
+           {mockCount}
 
-<button
-onClick={async()=>{
+        </div>
 
- setWorking(true)
+      </div>
 
- try{
+      <div className="
+      grid
+      gap-4
+      ">
 
-   const {
-      recalculateRanking
-   }=await import(
-     '../services/scoreService'
-   )
+        <button
+          disabled={
+            !!actionLoading
+          }
+          onClick={()=>
+            runAction(
+              'create',
+              async()=>{
 
-   await recalculateRanking()
+                await generateMockUsers(
+                  5
+                );
 
- }finally{
+              }
+            )
+          }
+          className="
+          bg-green-600
+          p-2
+		  w-48
+          rounded
+          "
+        >
 
-   setWorking(false)
- }
+          {
+            actionLoading==='create'
+            ?
+            'Criando...'
+            :
+            'Criar 5 Fakes'
+          }
 
-}}
-className="bg-yellow-700 px-4 py-2 rounded"
->
-Recalcular ranking
-</button>
+        </button>
 
-<button
-onClick={async()=>{
+        <button
+          disabled={
+            !!actionLoading
+          }
+          onClick={()=>
+            runAction(
+              'clearUsers',
+              async()=>{
 
- setWorking(true)
+                await clearMockUsers();
 
- try{
+              }
+            )
+          }
+          className="
+          bg-red-600
+          p-2
+		  w-48
+          rounded
+          "
+        >
 
-   const {
-      clearResults
-   }=await import('../services')
+          {
+            actionLoading==='clearUsers'
+            ?
+            'Limpando...'
+            :
+            'Limpar Fakes'
+          }
 
-   await clearResults()
+        </button>
 
- }finally{
+        <button
+          disabled={
+            !!actionLoading
+          }
+          onClick={()=>
+            runAction(
+              'simulate',
+              async()=>{
 
-   setWorking(false)
- }
+                await simulateResults();
 
-}}
-className="bg-gray-700 px-4 py-2 rounded"
->
-Limpar resultados
-</button>
+              }
+            )
+          }
+          className="
+          bg-blue-600
+          p-2
+		  w-48
+          rounded
+		  "
+        >
 
-</div>
+          {
+            actionLoading==='simulate'
+            ?
+            'Simulando...'
+            :
+            'Simular resultados'
+          }
 
- //</div>
+        </button>
 
- )
+        <button
+          disabled={
+            !!actionLoading
+          }
+          onClick={()=>
+            runAction(
+              'ranking',
+              async()=>{
 
+                await recalculateRanking();
+
+              }
+            )
+          }
+          className="
+          bg-yellow-500
+          text-black
+          p-2
+		  w-48
+          rounded
+          "
+        >
+
+          {
+            actionLoading==='ranking'
+            ?
+            'Recalculando...'
+            :
+            'Recalcular ranking'
+          }
+
+        </button>
+
+        <button
+          disabled={
+            !!actionLoading
+          }
+          onClick={()=>
+            runAction(
+              'clearResults',
+              async()=>{
+
+                await clearResults();
+
+              }
+            )
+          }
+          className="
+          bg-purple-600
+          p-2
+		  w-48
+          rounded
+          "
+        >
+
+          {
+            actionLoading==='clearResults'
+            ?
+            'Limpando...'
+            :
+            'Limpar resultados'
+          }
+
+        </button>
+
+      </div>
+
+    </div>
+  )
 }
