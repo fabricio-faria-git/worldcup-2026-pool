@@ -15,7 +15,6 @@ import {
   generateSlug,
   getLeagueBySlug,
   updateLeague,
-  uploadLeagueImage,
   type LeagueWithId,
 } from '../services';
 
