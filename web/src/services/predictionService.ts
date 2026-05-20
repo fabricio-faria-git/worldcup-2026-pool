@@ -93,7 +93,7 @@ export const savePrediction=async(
   */
 
   const match=
-    await getMatch(gameId)
+    await getMatch(String(gameId))
 
   if(match){
 

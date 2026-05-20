@@ -35,7 +35,7 @@ import Admin from './pages/Admin';
 // função splash
 declare global {
   interface Window {
-    hideSplash: () => void;
+    hideSplash?: () => void;
   }
 }
 

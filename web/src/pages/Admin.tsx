@@ -72,28 +72,42 @@ export default function Admin() {
     }
   };
 
-  useEffect(()=>{
+useEffect(()=>{
 
-    console.log(
-      'useEffect'
-    );
+  if(
+    typeof window !== 'undefined' &&
+    window.hideSplash
+  ){
+    window.hideSplash()
+  }
 
-    if(
-      initialized.current
-    ){
-      console.log(
-        'já inicializado'
-      );
+  async function load(){
 
-      return;
+    try{
+
+      const total=
+        await getMockUserCount()
+
+      setMockCount(total)
+
     }
+    catch(e){
 
-    initialized.current=
-      true;
+      console.error(
+        'Erro ao carregar',
+        e
+      )
 
-    loadData();
+    }
+    finally{
 
-  },[]);
+      setLoading(false)
+    }
+  }
+
+  load()
+
+},[])
 
   const runAction=
   async(

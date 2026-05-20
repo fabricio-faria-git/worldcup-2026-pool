@@ -35,7 +35,7 @@ export const DevToolsPanel = () => {
     setLoading(actionName);
     try {
       const count = await action();
-      showToast(successMessage(count), 'successo');
+      showToast(successMessage(count), 'success');
       // Refresh mock count
       const newCount = await getMockUserCount();
       setMockCount(newCount);
