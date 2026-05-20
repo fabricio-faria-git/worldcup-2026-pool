@@ -14,9 +14,6 @@ import {
 
 export default function Admin() {
 
-  const initialized =
-    useRef(false);
-
   const [loading,setLoading] =
     useState(true);
 
