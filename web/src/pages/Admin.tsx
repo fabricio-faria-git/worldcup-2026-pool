@@ -26,10 +26,6 @@ export default function Admin() {
   ]=
     useState<string|null>(null);
 
-  console.log(
-    'ADMIN RENDER'
-  );
-
   const loadData=
   async()=>{
 
@@ -41,11 +37,6 @@ export default function Admin() {
 
       const total=
         await getMockUserCount();
-
-      console.log(
-        'TOTAL:',
-        total
-      );
 
       setMockCount(
         total
@@ -140,14 +131,6 @@ useEffect(()=>{
     }
   };
 
-  console.log(
-    'RENDER FINAL',
-    {
-      loading,
-      mockCount,
-      actionLoading
-    }
-  );
 
   if(
     loading

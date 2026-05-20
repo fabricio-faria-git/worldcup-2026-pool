@@ -159,8 +159,7 @@ export const clearMockUsers = async (): Promise<number> => {
 
 export const getMockUserCount =
   async (): Promise<number> => {
-    console.log('Lendo usuários...');
-
+    
     const snapshot = await get(
       ref(db, 'users')
     );
@@ -175,9 +174,7 @@ export const getMockUserCount =
       .filter((u: any) => u.mock)
       .length;
 
-    console.log('mock total:', total);
-
-    return total;
+   return total;
   };
 
 /**

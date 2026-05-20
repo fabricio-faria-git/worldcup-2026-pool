@@ -22,11 +22,9 @@ async()=>{
 
    '1':{
 
-      homeScore:2,
-      awayScore:1,
-	  date:"2026-05-18T19:15:00Z",
-	  timestamp:1779131700,
-      finished:true
+      homeScore:-1,
+      awayScore:-1,
+	  finished:false
     },
 
     '2':{

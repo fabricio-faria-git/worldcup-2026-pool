@@ -106,7 +106,7 @@ export const UserMenu = ({ mobile = false }: UserMenuProps) => {
       </Button>
     );
   }
-  console.log({ user });
+
   return (
     <div ref={buttonRef} className="relative">
       <Button

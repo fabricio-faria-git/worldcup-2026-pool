@@ -53,13 +53,6 @@ const cutoffTime =
 const predictionsClosed =
   Date.now() >= cutoffTime;
 
-console.log({
-  jogo: match.homeName + ' x ' + match.awayName,
-  agora: new Date(),
-  kickoff: new Date(kickoffTime),
-  fechado: predictionsClosed
-});
-
   const matchEndEstimate = kickoffTime + 150 * 60 * 1000; // 2.5 hours after kickoff
   const isLive =
     !isPlayed && Date.now() >= kickoffTime && Date.now() < matchEndEstimate;

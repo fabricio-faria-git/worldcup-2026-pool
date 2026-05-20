@@ -30,8 +30,7 @@ export const Leagues = () => {
 
   React.useEffect(() => {
 
-  console.log("LEAGUES EFFECT")
-
+ 
   if (!user) {
     console.log("SEM USER")
 
