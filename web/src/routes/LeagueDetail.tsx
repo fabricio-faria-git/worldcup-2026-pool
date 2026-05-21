@@ -169,7 +169,7 @@ export const LeagueDetail = () => {
 
     const confirmed = await showConfirm({
       title: 'Remover membro',
-      message: `Are you sure you want to remove ${displayName} from this league?`,
+      message: `Tem certeza de que deseja remover ${displayName} desta liga?`,
       confirmText: 'Remover',
     });
 
@@ -177,7 +177,7 @@ export const LeagueDetail = () => {
 
     try {
       await leaveLeague(league.id, userId);
-      showToast(`${displayName} has been removed from the league`);
+      showToast(`${displayName} foi removido da liga`);
     } catch (err) {
       console.error(err);
       showToast('Falha ao remover membro.', 'error');
