@@ -164,7 +164,7 @@ export const Leagues = () => {
                   }}
                   className="flex-1"
                 >
-                  Cancel
+                  Cancelar
                 </Button>
                 <Button
                   type="submit"
