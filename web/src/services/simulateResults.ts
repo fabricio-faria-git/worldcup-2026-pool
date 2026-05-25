@@ -28,17 +28,15 @@ async()=>{
     },
 
     '2':{
-
       homeScore:-1,
       awayScore:-1,
-      finished:false
+	  finished:false
     },
 
     '3':{
-
       homeScore:-1,
       awayScore:-1,
-      finished:false
+	  finished:false
     },
 	    '4':{
 
