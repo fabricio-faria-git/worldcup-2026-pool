@@ -26,9 +26,10 @@ jobs:
       - name: Run update script
         working-directory: web
         env:
-          NODE_OPTIONS: --openssl-legacy-provider # 👈 ADICIONADO AQUI
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
           FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
           FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+
           VITE_FIREBASE_DATABASE_URL: ${{ secrets.VITE_FIREBASE_DATABASE_URL }}
+
         run: npm run update-matches
