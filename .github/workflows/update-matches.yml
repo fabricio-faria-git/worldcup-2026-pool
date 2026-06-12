@@ -2,7 +2,7 @@ name: Update World Cup Matches2
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/15 * * * *'
 
   workflow_dispatch:
 
