@@ -20,44 +20,6 @@ async()=>{
 
   const fakeResults={
 
-   '1':{
-
-      homeScore:-1,
-      awayScore:-1,
-	  finished:false
-    },
-
-    '2':{
-      homeScore:-1,
-      awayScore:-1,
-	  finished:false
-    },
-
-    '3':{
-      homeScore:-1,
-      awayScore:-1,
-	  finished:false
-    },
-	    '4':{
-
-      homeScore:-1,
-      awayScore:-1,
-      finished:false
-    },
-
-    '5':{
-
-      homeScore:-1,
-      awayScore:-1,
-      finished:false
-    },
-
-    '6':{
-
-      homeScore:-1,
-      awayScore:-1,
-      finished:false
-    }
 
   }
 
