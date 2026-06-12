@@ -322,6 +322,11 @@ await db.ref().update(updates);
 async function run() {
 
   console.log(
+    'Executado em:',
+    new Date().toISOString()
+  );
+
+  console.log(
     'Buscando jogos FIFA...'
   );
 
