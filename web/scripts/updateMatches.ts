@@ -2,6 +2,61 @@ import 'dotenv/config';
 
 import { db } from './firebase-admin';
 
+const teamTranslations: Record<string, string> = {
+  Canada: 'Canadá',
+  Mexico: 'México',
+  USA: 'Estados Unidos',
+  Argentina: 'Argentina',
+  Brazil: 'Brasil',
+  Colombia: 'Colômbia',
+  Ecuador: 'Equador',
+  Paraguay: 'Paraguai',
+  Uruguay: 'Uruguai',
+  Austria: 'Áustria',
+  Belgium: 'Bélgica',
+  'Bosnia and Herzegovina': 'Bósnia e Herzegovina',
+  Croatia: 'Croácia',
+  Czechia: 'República Tcheca',
+  England: 'Inglaterra',
+  France: 'França',
+  Germany: 'Alemanha',
+  Netherlands: 'Holanda',
+  Norway: 'Noruega',
+  Portugal: 'Portugal',
+  Scotland: 'Escócia',
+  Spain: 'Espanha',
+  Sweden: 'Suécia',
+  Switzerland: 'Suíça',
+  Türkiye: 'Turquia',
+  Algeria: 'Argélia',
+  'Cape Verde': 'Cabo Verde',
+  'Congo DR': 'Congo',
+  "Côte d'Ivoire": 'Costa do Marfim',
+  Egypt: 'Egito',
+  Ghana: 'Gana',
+  Morocco: 'Marrocos',
+  Senegal: 'Senegal',
+  'South Africa': 'África do Sul',
+  Tunisia: 'Tunísia',
+  Australia: 'Austrália',
+  'IR Iran': 'Irã',
+  Iraq: 'Iraque',
+  Japan: 'Japão',
+  Jordan: 'Jordânia',
+  'Korea Republic': 'Coreia do Sul',
+  Qatar: 'Catar',
+  'Saudi Arabia': 'Arábia Saudita',
+  Uzbekistan: 'Uzbequistão',
+  Curaçao: 'Curaçau',
+  Haiti: 'Haiti',
+  Panama: 'Panamá',
+  'New Zealand': 'Nova Zelândia',
+};
+
+const translateTeam = (name: string): string => {
+  return teamTranslations[name] || name;
+};
+
 /*
 |--------------------------------------------------------------------------
 | FIFA
